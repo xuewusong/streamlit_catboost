@@ -135,7 +135,7 @@ if submit:
     with st.expander("**〽️预测结果可视化**", True):
         st.markdown(f'''
         <div style="text-align: center; color: red; font-size:20px; font-weight: bold; padding: 1rem; margin-bottom: 0.5rem; border-bottom: 1px solid black;">
-        当前预测结果为：{int(res[0])} ⬅ {res_p}, 是否会造成老年缺血性心脏病患者再入院？（{D[res]}）
+        当前预测结果为：{int(res[0])} ⬅ {res_p}, 是否会造成老年缺血性心脏病患者再入院？（{D[int(res)]}）
         </div>''', unsafe_allow_html=True)
         c = st.columns([1,4,4,1])
         
