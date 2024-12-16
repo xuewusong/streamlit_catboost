@@ -32,6 +32,44 @@ features = X_train.columns if hasattr(X_train, 'columns') else np.arange(X_train
 df0 = pd.DataFrame({"feature importances":feature_importances, "features":features})
 df0 = df0.sort_values(by="feature importances") # 进行排序
 
+BOOL = {"No":0, "Yes":1}
+SEX = {"Female":0, "Male":1}
+Educational_level = {
+    "No education":0,
+    "Primary school":1,
+    "Middle school":2,
+    "High school":3,
+    "College or above":4
+}
+dw = {
+    "LOS":"days",
+    "DBP":"mmHg",
+    "LA":"mm",
+    "RA":"mm",
+    "NOM":"types",
+    "FT3":"pmol/L",
+    "FT4":"pmol/L",
+    "PTA":"%",
+    "TT":"seconds",
+    "Fibrinogen":"g/L",
+    "LDLC":"mmol/L",
+    "ApoB":"g/L",
+    #"Albumin/globulin",
+    "AST":"U/L",
+    "Indirect bilirubin":"µmol/L",
+    "Creatinine":"µmol/L",
+    "Uric acid":"µmol/L",
+    "LDH":"U/L",
+    "CKMB":"µg/L",
+    "Glucose":"mmol/L",
+    "Monocyte":"*10^9/L",
+    "Basophil":"*10^9/L",
+    "RBC":"*10^12/L",
+    "Hemoglobin":"g/L",
+    "RDW-SD":"fL",
+    "Serum sodium":"mmol/L"
+}
+
 # 设置图片样式
 st.markdown("""
 <style>
@@ -99,12 +137,24 @@ with st.form("input"):
     for i in col: # 获取模型输入
         if i["name"] in df0[(df0["feature importances"]<= im[1]) & (df0["feature importances"]>= im[0])]["features"].tolist():
             if i["type"] == "choice":
-                st.session_state["data"][i["name"]] = c[k%6].selectbox(i["name"], i['data'], index=i['data'].index(default_value[i["name"]]))
-            else:
-                if i["dtype"]=="int":
-                    st.session_state["data"][i["name"]] = c[k%6].number_input(i["name"], step=i["step"], value=int(default_value[i["name"]]))
+                V = [int(j) for j in i['data']]
+                if i["name"]=="Educational level":
+                    st.session_state["data"][i["name"]] = Educational_level[c[k%6].selectbox(i["name"], list(Educational_level.keys()), index=i['data'].index(default_value[i["name"]]))]
+                elif i["name"]=="Sex":
+                    st.session_state["data"][i["name"]] = SEX[c[k%6].selectbox(i["name"], list(SEX.keys()), index=i['data'].index(default_value[i["name"]]))]
+                elif sum(V)==1:
+                    st.session_state["data"][i["name"]] = BOOL[c[k%6].selectbox(i["name"], list(BOOL.keys()), index=i['data'].index(default_value[i["name"]]))]
                 else:
-                    st.session_state["data"][i["name"]] = c[k%6].number_input(i["name"], step=i["step"], value=default_value[i["name"]])
+                    st.session_state["data"][i["name"]] = c[k%6].selectbox(i["name"], V, index=i['data'].index(default_value[i["name"]]))
+            else:
+                if i["name"] in dw:
+                    NAME = i["name"]+f'({dw[i["name"]]})'
+                else:
+                    NAME = i["name"]
+                if i["dtype"]=="int":
+                    st.session_state["data"][i["name"]] = c[k%6].number_input(NAME, step=i["step"], value=int(default_value[i["name"]]))
+                else:
+                    st.session_state["data"][i["name"]] = c[k%6].number_input(NAME, step=i["step"], value=default_value[i["name"]])
             k = k+1
     
     c = st.columns(5)
