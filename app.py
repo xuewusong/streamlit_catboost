@@ -98,7 +98,7 @@ def plot_importance():
     df["features"] = df.apply(lambda x: x["features"]+f' ⬅ ({round(x["feature importances"], 2)})', axis=1)
 
     #fig = plt.figure(figsize=(8, 8), dpi=300)
-    fig, ax = plt.subplots(figsize=(8, 10), dpi=300, facecolor="none")
+    fig, ax = plt.subplots(figsize=(8, 10.3), dpi=300, facecolor="none")
     df.plot(kind="barh", y="feature importances", x="features", ax=ax, width=0.9, legend=False, color="#F57C00")
     plt.gca().spines.right.set_visible(False)
     plt.gca().spines.top.set_visible(False)
@@ -119,7 +119,7 @@ def plot_water_full():
     # 绘制瀑布图  
     #plt.figure(figsize=(8, 4), dpi=300) 
     fig, ax = plt.subplots(figsize=(8, 4), dpi=300, facecolor="none")    
-    shap.waterfall_plot(shap_values[0], max_display=15)  
+    shap.waterfall_plot(shap_values[0], max_display=20)  
     
     st.pyplot(fig, use_container_width=True)
 
