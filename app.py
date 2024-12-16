@@ -138,6 +138,7 @@ with st.form("input"):
         if i["name"] in df0[(df0["feature importances"]<= im[1]) & (df0["feature importances"]>= im[0])]["features"].tolist():
             if i["type"] == "choice":
                 V = [int(j) for j in i['data']]
+                V = sorted(V)
                 if i["name"]=="Educational level":
                     st.session_state["data"][i["name"]] = Educational_level[c[k%6].selectbox(i["name"], list(Educational_level.keys()), index=i['data'].index(default_value[i["name"]]))]
                 elif i["name"]=="Sex":
